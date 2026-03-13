@@ -1,8 +1,9 @@
 package io.github.ninobomba.utils.spring.api.response.record;
 
 
-import io.github.ninobomba.utils.java.constants.DefaultValueConstants;
-import io.github.ninobomba.utils.java.constants.processes.BizProcessResponse;
+import io.github.ninobomba.utils.spring.constants.DefaultValueConstants;
+import io.github.ninobomba.utils.spring.constants.processes.BizProcessResponse;
+
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,7 +84,7 @@ public interface ApiResponseCreator {
     static ResponseEntity<ApiRecordResponse> toApiResponse(
             String requestId,
             Boolean response,
-            io.github.ninobomba.utils.java.constants.processes.BizProcessResponse.Status status,
+            BizProcessResponse.Status status,
             Object payload
     ) {
         if (response) {
@@ -94,11 +95,11 @@ public interface ApiResponseCreator {
 
     static ResponseEntity<ApiRecordResponse> toApiResponse(
             String requestId,
-            io.github.ninobomba.utils.java.constants.processes.BizProcessResponse response,
-            io.github.ninobomba.utils.java.constants.processes.BizProcessResponse.Status status,
+            BizProcessResponse response,
+            BizProcessResponse.Status status,
             Object payload
     ) {
-        if (response == io.github.ninobomba.utils.java.constants.processes.BizProcessResponse.SUCCESS) {
+        if (response == BizProcessResponse.SUCCESS) {
             return createSuccessResponse(requestId, payload, mapStatus(status));
         } else {
             return createFailureResponse(requestId, payload, mapStatus(status));

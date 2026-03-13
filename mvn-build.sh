@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check on the pom.xml and here
-RELEASE_VERSION="1.0.0.40"
+RELEASE_VERSION="0.0.0.1"
 ARTIFACT_ID="t4m-spring-utils"
 
 cleanup()
@@ -10,7 +10,7 @@ cleanup()
 
     mvn clean
     mvn dependency:purge-local-repository -DmanualInclude="io.github.ninobomba:$ARTIFACT_ID:$RELEASE_VERSION"
-    rm -rf ~/.m2/repository/io/github/ninobomba
+    rm -rf ~/.m2/repository/io/github/ninobomba/t4m-spring-utils
 
   echo "build::cleanup() -> clean up is complete"
 }

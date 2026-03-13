@@ -1,7 +1,6 @@
 package io.github.ninobomba.utils.spring.api.response.record;
 
-
-import io.github.ninobomba.utils.java.constants.DefaultValueConstants;
+import io.github.ninobomba.utils.spring.constants.DefaultValueConstants;
 
 import java.io.Serializable;
 import java.util.Optional;
