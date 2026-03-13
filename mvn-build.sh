@@ -10,7 +10,7 @@ cleanup()
 
     mvn clean
     mvn dependency:purge-local-repository -DmanualInclude="io.github.ninobomba:$ARTIFACT_ID:$RELEASE_VERSION"
-    rm -rf ~/.m2/repository/io/github/ninobomba/t4m-spring-utils
+    rm -rf ~/.m2/repository/io/github/ninobomba/$ARTIFACT_ID
 
   echo "build::cleanup() -> clean up is complete"
 }
