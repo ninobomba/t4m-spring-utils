@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check on the pom.xml and here
-RELEASE_VERSION="0.0.0.1"
+RELEASE_VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml | head -1)
 ARTIFACT_ID="t4m-spring-utils"
 
 cleanup()
@@ -29,7 +29,7 @@ package()
 deploy()
 {
   echo "build::deploy() -> Deploying jar file locally"
-  mvn install:install-file -Dfile=target/$ARTIFACT_ID-$RELEASE_VERSION.jar -DgroupId=io.github.ninobomba -DartifactId=$ARTIFACT_ID -Dversion=$RELEASE_VERSION -Dpackaging=jar -DgeneratePom=true -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false -DupdateReleaseInfo=true
+  mvn install:install-file -Dfile=target/$ARTIFACT_ID-"$RELEASE_VERSION".jar -DgroupId=io.github.ninobomba -DartifactId=$ARTIFACT_ID -Dversion="$RELEASE_VERSION" -Dpackaging=jar -DgeneratePom=true -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false -DupdateReleaseInfo=true
   echo "build::deploy() -> Deploying jar file locally is complete"
 }
 

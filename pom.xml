@@ -6,7 +6,7 @@
 
     <groupId>io.github.ninobomba</groupId>
     <artifactId>t4m-spring-utils</artifactId>
-    <version>0.0.0.1</version>
+    <version>1.0.0.1</version>
     <packaging>jar</packaging>
 
     <name>t4m-spring-utils</name>
