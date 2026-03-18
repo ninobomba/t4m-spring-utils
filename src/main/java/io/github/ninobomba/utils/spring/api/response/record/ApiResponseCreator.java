@@ -1,8 +1,7 @@
 package io.github.ninobomba.utils.spring.api.response.record;
 
-
+import io.github.ninobomba.utils.java.constants.processes.BizProcessResponse;
 import io.github.ninobomba.utils.spring.constants.DefaultValueConstants;
-import io.github.ninobomba.utils.spring.constants.processes.BizProcessResponse;
 
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;

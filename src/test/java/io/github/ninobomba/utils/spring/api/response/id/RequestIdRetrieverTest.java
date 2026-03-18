@@ -17,9 +17,9 @@ class RequestIdRetrieverTest {
 
 	@Test
 	void getRequestId_shouldReturnId_whenHeaderIsPresent ( ) {
-		javax.servlet.http.HttpServletRequest javaxRequest = org.mockito.Mockito.mock ( javax.servlet.http.HttpServletRequest.class );
-		when ( webRequest.getRequest ( ) ).thenReturn ( javaxRequest );
-		when ( javaxRequest.getAttribute ( "X_REQUEST_ID" ) ).thenReturn ( "req-123" );
+		jakarta.servlet.http.HttpServletRequest jakartaRequest = org.mockito.Mockito.mock ( jakarta.servlet.http.HttpServletRequest.class );
+		when ( webRequest.getRequest ( ) ).thenReturn ( jakartaRequest );
+		when ( jakartaRequest.getAttribute ( "X_REQUEST_ID" ) ).thenReturn ( "req-123" );
 
 		String requestId = RequestIdRetriever.getRequestId ( webRequest );
 
@@ -28,9 +28,9 @@ class RequestIdRetrieverTest {
 
 	@Test
 	void getRequestId_shouldReturnUnknown_whenHeaderIsMissing ( ) {
-		javax.servlet.http.HttpServletRequest javaxRequest = org.mockito.Mockito.mock ( javax.servlet.http.HttpServletRequest.class );
-		when ( webRequest.getRequest ( ) ).thenReturn ( javaxRequest );
-		when ( javaxRequest.getAttribute ( "X_REQUEST_ID" ) ).thenReturn ( null );
+		jakarta.servlet.http.HttpServletRequest jakartaRequest = org.mockito.Mockito.mock ( jakarta.servlet.http.HttpServletRequest.class );
+		when ( webRequest.getRequest ( ) ).thenReturn ( jakartaRequest );
+		when ( jakartaRequest.getAttribute ( "X_REQUEST_ID" ) ).thenReturn ( null );
 
 		String requestId = RequestIdRetriever.getRequestId ( webRequest );
 
