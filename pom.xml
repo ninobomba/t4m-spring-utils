@@ -65,6 +65,7 @@
         <mockito.version>5.12.0</mockito.version>
         <spring-boot.version>3.4.3</spring-boot.version>
         <t4m-java-utils.version>1.0.0.1</t4m-java-utils.version>
+        <org.mapstruct.version>1.6.3</org.mapstruct.version>
     </properties>
 
     <build>
@@ -206,6 +207,7 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.uadetector</groupId>
