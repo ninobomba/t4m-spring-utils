@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import javax.net.ssl.SSLHandshakeException;
 
 
 /**
@@ -91,18 +92,18 @@ public interface HttpUrlUtils {
 	@SneakyThrows
 	static boolean hostAvailabilityCheck ( String url, int port, int timeout ) {
 
-		var httpUrl = url.replaceFirst ( "^https", "http" ); // Otherwise, an exception may be thrown on invalid SSL certificates.
-
 		HttpURLConnection connection = null;
 
 		try {
-			String uri = port > 0 ? httpUrl.concat ( ":" + port ) : httpUrl;
+			String uri = port > 0 ? url.concat ( ":" + port ) : url;
 			connection = ( HttpURLConnection ) new URI ( uri ).toURL ( ).openConnection ( );
 			connection.setConnectTimeout ( timeout );
 			connection.setReadTimeout ( timeout );
 			connection.setRequestMethod ( "HEAD" );
 			int responseCode = connection.getResponseCode ( );
 			return 200 <= responseCode && responseCode <= 399;
+		} catch ( SSLHandshakeException exception ) {
+			return false;
 		} catch ( IOException exception ) {
 			return false;
 		} finally {

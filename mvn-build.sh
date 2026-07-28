@@ -3,6 +3,7 @@
 # Check on the pom.xml and here
 RELEASE_VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml | head -1)
 ARTIFACT_ID="t4m-spring-utils"
+CLEAN_LOCAL_REPOSITORY=${CLEAN_LOCAL_REPOSITORY:-false}
 
 cleanup()
 {

@@ -90,8 +90,6 @@ public interface HttpUrlUtils {
 
 	@SneakyThrows
 	static boolean hostAvailabilityCheck ( String url, int port, int timeout ) {
-		url = url.replaceFirst ( "^https", "http" ); // Otherwise, an exception may be thrown on invalid SSL certificates.
-
 		HttpURLConnection connection = null;
 		try {
 			String uri = port > 0 ? url.concat ( ":" + port ) : url;

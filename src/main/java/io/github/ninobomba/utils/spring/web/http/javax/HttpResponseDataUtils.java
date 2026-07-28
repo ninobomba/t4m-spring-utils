@@ -1,7 +1,7 @@
 package io.github.ninobomba.utils.spring.web.http.javax;
 
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toMap;
@@ -30,14 +30,4 @@ public interface HttpResponseDataUtils {
 		return httpResponse.getHeaderNames ( ).stream ( ).collect ( toMap ( key -> key, httpResponse::getHeader ) );
 	}
 
-	/**
-	 * Converts the response headers of an HttpServletResponse into a Map.
-	 *
-	 * @param httpResponse the HttpServletResponse object containing the response headers
-	 * @return a Map representing the response headers, where the keys are the header names and the values are the header values
-	 */
-	static Map < String, String > getResponseHeadersMap ( jakarta.servlet.http.HttpServletResponse httpResponse ) {
-		return httpResponse.getHeaderNames ( ).stream ( ).collect ( toMap ( key -> key, httpResponse::getHeader ) );
-	}
-	
 }

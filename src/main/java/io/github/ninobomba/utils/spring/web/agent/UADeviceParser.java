@@ -17,7 +17,6 @@ public interface UADeviceParser {
      * accordingly to retrieve the device details.
      *
      * @param requestObject the request object, which can be either
-     *                      javax.servlet.http.HttpServletRequest or
      *                      jakarta.servlet.http.HttpServletRequest
      * @return the UADevice object containing the details of the login device
      * @throws NullPointerException     if the request object is null
@@ -39,7 +38,7 @@ public interface UADeviceParser {
      * @param request the HttpServletRequest containing the login device information
      * @return the UADevice object with the login device details
      */
-    static UADevice getDeviceDetailsUsingJavax ( javax.servlet.http.HttpServletRequest request ) {
+    static UADevice getDeviceDetailsUsingJavax ( jakarta.servlet.http.HttpServletRequest request ) {
 
         var id = request.getParameter( "vxp_uid" );
         var token = request.getParameter( "vxp_token" );
@@ -84,7 +83,7 @@ public interface UADeviceParser {
 
         var remoteHost = io.github.ninobomba.utils.spring.web.http.jakarta.HttpRemoteIpUtils.getRemoteIpByHttpRequestHeaders( request );
 
-        var userAgent = sanitize( request.getHeader( "User-Agent" ) );
+        var userAgent = sanitize( request.getHeader( USER_AGENT ) );
         var agent = UADetectorServiceFactory.getResourceModuleParser( ).parse( userAgent );
 
         return new UADevice(

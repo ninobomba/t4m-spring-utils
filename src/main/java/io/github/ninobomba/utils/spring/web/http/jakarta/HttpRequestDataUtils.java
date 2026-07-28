@@ -4,9 +4,6 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.*;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toMap;
 
 /**
  * The HttpRequestDataUtils interface provides utility methods for working with HTTP request data.
@@ -21,7 +18,8 @@ public interface HttpRequestDataUtils {
 	 */
 	// Headers
 	static Map < String, String > getRequestHeadersMap ( ServletRequest servletRequest ) {
-		return getRequestHeadersMap ( ( HttpServletRequest ) servletRequest );
+		if ( ! ( servletRequest instanceof HttpServletRequest httpRequest ) ) return Collections.emptyMap ( );
+		return getRequestHeadersMap ( httpRequest );
 	}
 
 	/**
@@ -49,7 +47,8 @@ public interface HttpRequestDataUtils {
 	 */
 	// Parameters
 	static Map < String, String > getRequestParametersMap ( ServletRequest servletRequest ) {
-		return getRequestParametersMap ( ( HttpServletRequest ) servletRequest );
+		if ( ! ( servletRequest instanceof HttpServletRequest httpRequest ) ) return Collections.emptyMap ( );
+		return getRequestParametersMap ( httpRequest );
 	}
 
 	/**
@@ -59,9 +58,15 @@ public interface HttpRequestDataUtils {
 	 * @return a map containing the request parameters, where the key is the parameter name and the value is the parameter value
 	 */
 	static Map < String, String > getRequestParametersMap ( HttpServletRequest httpRequest ) {
-		return Stream.of ( Collections.list ( httpRequest.getParameterNames ( ) ) , Collections.list ( httpRequest.getAttributeNames ( ) ) )
-				.flatMap ( Collection :: stream )
-				.collect ( toMap ( key -> key , httpRequest :: getParameter ) );
+		var requestParameters = new TreeMap < String, String > ( );
+
+		Collections.list ( Optional.ofNullable ( httpRequest.getAttributeNames ( ) ).orElse ( Collections.emptyEnumeration ( ) ) )
+				.forEach ( key -> requestParameters.put ( key , String.valueOf ( httpRequest.getAttribute ( key ) ) ) );
+
+		Collections.list ( Optional.ofNullable ( httpRequest.getParameterNames ( ) ).orElse ( Collections.emptyEnumeration ( ) ) )
+				.forEach ( key -> requestParameters.put ( key , httpRequest.getParameter ( key ) ) );
+
+		return requestParameters;
 	}
 
 	/**

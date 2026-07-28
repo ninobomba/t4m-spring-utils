@@ -26,7 +26,6 @@ class ActiveProfileUtilsTest {
         assertThat ( ActiveProfileUtils.resolvedProductionProfile ( "dev", devEnv ) ).isEqualTo ( "dev" );
 
         String[] untrimmedEnv = { " prod " };
-        // This will fail currently because resolvedProductionProfile doesn't trim
         assertThat ( ActiveProfileUtils.resolvedProductionProfile ( "dev", untrimmedEnv ) ).isEqualTo ( "production" );
     }
 

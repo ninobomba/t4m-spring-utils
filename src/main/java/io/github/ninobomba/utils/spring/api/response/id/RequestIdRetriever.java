@@ -8,7 +8,8 @@ public interface RequestIdRetriever {
 
     static String getRequestId(ServletWebRequest webRequest) {
         return Optional
-                .of(webRequest.getRequest())
+                .ofNullable(webRequest)
+                .map(ServletWebRequest::getRequest)
                 .map(request -> request.getAttribute("X_REQUEST_ID"))
                 .map(String::valueOf)
                 .orElse("unknown");

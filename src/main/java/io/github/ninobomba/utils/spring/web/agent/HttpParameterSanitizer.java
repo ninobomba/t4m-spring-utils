@@ -6,8 +6,8 @@ public class HttpParameterSanitizer {
 
 	public static String sanitize ( String input ) {
 		return Optional.ofNullable ( input )
-				.map ( value -> value.replaceAll ( "[^a-zA-Z0-9\\s]" , "" ) )
-				.orElse ( "No value provided" );
+				.map ( value -> value.replaceAll ( "[\\p{Cntrl}&&[^\\r\\n\\t]]" , "" ) )
+				.orElse ( null );
 	}
 
 }

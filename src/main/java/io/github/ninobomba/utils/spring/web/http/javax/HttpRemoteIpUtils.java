@@ -1,30 +1,21 @@
 package io.github.ninobomba.utils.spring.web.http.javax;
 
-import lombok.SneakyThrows;
+import com.google.common.net.InetAddresses;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.util.List;
-import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.function.Predicate;
 
 import static com.google.common.net.HttpHeaders.X_FORWARDED_FOR;
-import static org.springframework.http.HttpHeaders.REFERER;
 
 /**
  * The HttpRemoteIpUtils class provides utilities for retrieving the remote IP address from HTTP request headers.
  */
 public interface HttpRemoteIpUtils {
 
-    List< String > HEADER_IP_REGEX_LIST = List.of(
-            X_FORWARDED_FOR,
-            REFERER,
-            "PROXY-CLIENT-IP",
-            "WL-PROXY-CLIENT-IP",
-            "HTTP-CLIENT-IP",
-            "ORIGIN",
-            "HOST" );
+    Predicate < String > IP_ADDRESS_FORMAT_VALIDATOR = InetAddresses::isInetAddress;
 
     /**
      * Retrieves the remote IP address from HTTP request headers.
@@ -32,21 +23,41 @@ public interface HttpRemoteIpUtils {
      * @param request the HttpServletRequest containing the request headers
      * @return the remote IP address as a String, or null if no IP address is found in the headers
      */
-    @SneakyThrows
     static String getRemoteIpByHttpRequestHeaders ( HttpServletRequest request ) {
+        if ( Objects.isNull ( request ) ) return null;
 
-        var headers = HttpRequestDataUtils.getRequestHeadersMap( request );
+        var remoteAddr = request.getRemoteAddr ( );
 
-        if ( Objects.isNull( headers ) || headers.isEmpty( ) ) return null;
+        if ( isTrustedProxyAddress ( remoteAddr ) ) {
+            var xForwardedFor = request.getHeader ( X_FORWARDED_FOR );
+            var forwardedIp = getFirstValidIpAddress ( xForwardedFor );
 
-        return Optional.ofNullable( headers.entrySet( ).stream( )
-                .filter( e -> HEADER_IP_REGEX_LIST.contains( e.getKey( ).toUpperCase( ) ) )
-                .map( Map.Entry::getValue )
-                .findFirst( )
-                .orElseGet( request::getRemoteHost )
-        ).orElse(
-                InetAddress.getLocalHost( ).getHostAddress( )
-        );
+            if ( Objects.nonNull ( forwardedIp ) ) return forwardedIp;
+        }
+
+        return getFirstValidIpAddress ( remoteAddr );
+    }
+
+    private static String getFirstValidIpAddress ( String values ) {
+        if ( StringUtils.isBlank ( values ) ) return null;
+
+        return Arrays.stream ( values.split ( "," ) )
+                .map ( String::trim )
+                .filter ( StringUtils::isNotBlank )
+                .filter ( IP_ADDRESS_FORMAT_VALIDATOR )
+                .findFirst ( )
+                .orElse ( null );
+    }
+
+    private static boolean isTrustedProxyAddress ( String address ) {
+        var trustedProxy = getFirstValidIpAddress ( address );
+        if ( Objects.isNull ( trustedProxy ) ) return false;
+
+        var inetAddress = InetAddresses.forString ( trustedProxy );
+        return inetAddress.isAnyLocalAddress ( )
+                || inetAddress.isLoopbackAddress ( )
+                || inetAddress.isSiteLocalAddress ( )
+                || inetAddress.isLinkLocalAddress ( );
     }
 
 }
