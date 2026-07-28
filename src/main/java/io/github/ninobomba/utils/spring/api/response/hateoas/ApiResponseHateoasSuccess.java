@@ -17,4 +17,10 @@ public class ApiResponseHateoasSuccess extends RepresentationModel < ApiResponse
 	private final String message;
 	private final Object data;
 
+	public ApiResponseHateoasSuccess ( String id, String message, Object data ) {
+		this.id = id;
+		this.message = message;
+		this.data = data;
+	}
+
 }

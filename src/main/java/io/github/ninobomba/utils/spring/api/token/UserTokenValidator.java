@@ -2,16 +2,18 @@ package io.github.ninobomba.utils.spring.api.token;
 
 
 import io.github.ninobomba.utils.spring.api.response.id.IKVWebRequest;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import java.util.Optional;
 
-@Slf4j
 @Component
 public class UserTokenValidator implements IUserTokenValidator {
+
+    private static final Logger log = LoggerFactory.getLogger(UserTokenValidator.class);
 
     @Value("${application.token.maximum-length:1000}")
     private int maxTokenLength;

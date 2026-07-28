@@ -1,11 +1,12 @@
 package io.github.ninobomba.utils.spring.web.http.javax;
 
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,9 +24,12 @@ public interface HttpUrlUtils {
 	 * @param path The path to be used for building the URL.
 	 * @return The URL object built from the given path.
 	 */
-	@SneakyThrows
 	static URL buildURL ( String path ) {
-		return new URI ( path ).toURL ( );
+		try {
+			return new URI ( path ).toURL ( );
+		} catch ( URISyntaxException | MalformedURLException exception ) {
+			throw new IllegalArgumentException ( "Invalid URL: " + path, exception );
+		}
 	}
 
 	/**
@@ -34,9 +38,12 @@ public interface HttpUrlUtils {
 	 * @param path The path to be used for building the URI.
 	 * @return The URI object built from the given path.
 	 */
-	@SneakyThrows
 	static URI buildURI ( String path ) {
-		return new URI ( path );
+		try {
+			return new URI ( path );
+		} catch ( URISyntaxException exception ) {
+			throw new IllegalArgumentException ( "Invalid URI: " + path, exception );
+		}
 	}
 
 	/**
@@ -45,22 +52,25 @@ public interface HttpUrlUtils {
 	 * @param uri the URL string to be parsed
 	 * @return a map containing the components of the parsed URL
 	 */
-	@SneakyThrows
 	static Map < String, String > parseUrlWithParameters ( String uri ) {
 		var response = new HashMap < String, String > ( );
 
 		if ( StringUtils.isBlank ( uri ) ) return response;
 
-		var url = new URI ( uri ).toURL ( );
+		try {
+			var url = new URI ( uri ).toURL ( );
 
-		response.put ( "authority", url.getAuthority ( ) );
-		response.put ( "protocol", url.getProtocol ( ) );
-		response.put ( "host", url.getHost ( ) );
-		response.put ( "port", String.valueOf ( url.getPort ( ) ) );
-		response.put ( "path", url.getPath ( ) );
-		response.put ( "query", url.getQuery ( ) );
-		response.put ( "filename", url.getFile ( ) );
-		response.put ( "ref", url.getRef ( ) );
+			response.put ( "authority", url.getAuthority ( ) );
+			response.put ( "protocol", url.getProtocol ( ) );
+			response.put ( "host", url.getHost ( ) );
+			response.put ( "port", String.valueOf ( url.getPort ( ) ) );
+			response.put ( "path", url.getPath ( ) );
+			response.put ( "query", url.getQuery ( ) );
+			response.put ( "filename", url.getFile ( ) );
+			response.put ( "ref", url.getRef ( ) );
+		} catch ( URISyntaxException | MalformedURLException exception ) {
+			return response;
+		}
 
 		return response;
 	}
@@ -88,7 +98,6 @@ public interface HttpUrlUtils {
 		return hostAvailabilityCheck ( url, port, 10_000 );
 	}
 
-	@SneakyThrows
 	static boolean hostAvailabilityCheck ( String url, int port, int timeout ) {
 		HttpURLConnection connection = null;
 		try {
@@ -99,6 +108,8 @@ public interface HttpUrlUtils {
 			connection.setRequestMethod ( "HEAD" );
 			int responseCode = connection.getResponseCode ( );
 			return 200 <= responseCode && responseCode <= 399;
+		} catch ( URISyntaxException exception ) {
+			return false;
 		} catch ( IOException exception ) {
 			return false;
 		} finally {

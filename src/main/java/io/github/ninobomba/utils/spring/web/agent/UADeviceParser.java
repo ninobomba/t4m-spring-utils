@@ -38,7 +38,7 @@ public interface UADeviceParser {
      * @param request the HttpServletRequest containing the login device information
      * @return the UADevice object with the login device details
      */
-    static UADevice getDeviceDetailsUsingJavax ( jakarta.servlet.http.HttpServletRequest request ) {
+    static UADevice getDeviceDetailsUsingJavax ( javax.servlet.http.HttpServletRequest request ) {
 
         var id = request.getParameter( "vxp_uid" );
         var token = request.getParameter( "vxp_token" );

@@ -3,7 +3,7 @@ package io.github.ninobomba.utils.spring.web.http.javax;
 import com.google.common.net.InetAddresses;
 import org.apache.commons.lang3.StringUtils;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Predicate;

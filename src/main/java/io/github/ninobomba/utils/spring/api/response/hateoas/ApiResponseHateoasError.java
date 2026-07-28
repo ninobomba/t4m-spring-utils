@@ -19,4 +19,12 @@ public class ApiResponseHateoasError extends RepresentationModel < ApiResponseHa
 	private final String message;
 	private final String description;
 
+	public ApiResponseHateoasError ( String id, String field, String value, String message, String description ) {
+		this.id = id;
+		this.field = field;
+		this.value = value;
+		this.message = message;
+		this.description = description;
+	}
+
 }
