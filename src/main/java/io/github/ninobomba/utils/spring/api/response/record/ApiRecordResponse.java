@@ -5,7 +5,8 @@ import io.github.ninobomba.utils.spring.constants.DefaultValueConstants;
 import java.io.Serializable;
 import java.util.Optional;
 
-public sealed interface ApiRecordResponse permits ApiRecordResponse.BasicError, ApiRecordResponse.BasicErrorWithDescription, ApiRecordResponse.Error, ApiRecordResponse.Success {
+public sealed interface ApiRecordResponse
+		permits ApiRecordResponse.BasicError, ApiRecordResponse.BasicErrorWithDescription, ApiRecordResponse.Error, ApiRecordResponse.Success {
 
 	enum Messages {
 		;

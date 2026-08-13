@@ -1,7 +1,12 @@
 package io.github.ninobomba.utils.spring.web.http.javax;
 
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toMap;
@@ -28,6 +33,24 @@ public interface HttpResponseDataUtils {
 	 */
 	static Map < String, String > getResponseHeadersMap ( HttpServletResponse httpResponse ) {
 		return httpResponse.getHeaderNames ( ).stream ( ).collect ( toMap ( key -> key, httpResponse::getHeader ) );
+	}
+
+	static void addResponseHeader(ServletResponse servletResponse, String headerName, String headerValue) {
+		if (servletResponse instanceof HttpServletResponse httpResponse) {
+			httpResponse.addHeader(headerName, headerValue);
+		} else {
+			throw new IllegalArgumentException("Response is not an HttpServletResponse");
+		}
+	}
+
+	static void addDateTimeToResponseHeader(ServletResponse servletResponse) {
+		String formattedDate = ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME);
+		addResponseHeader(servletResponse, "ResponseDateTime", formattedDate);
+	}
+
+	static void addElapseTimeToResponseHeader(ServletResponse servletResponse, LocalDateTime startTime) {
+		long elapsedMillis = Duration.between(startTime, LocalDateTime.now()).toMillis();
+		addResponseHeader(servletResponse, "ResponseElapseTime", elapsedMillis + " ms");
 	}
 
 }
