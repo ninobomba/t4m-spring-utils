@@ -5,17 +5,20 @@ import lombok.Setter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.io.Serializable;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
 
     @Version
     @Column(name = "VERSION")
@@ -44,6 +47,14 @@ public abstract class BaseEntity {
     @Column(name = "LAST_MODIFIED_DATE", nullable = false)
     @NotNull(message = "Last modified date cannot be null")
     private Instant lastModifiedDate;
+
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
+
+    @NotNull
+    @ColumnDefault("false")
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted;
 
     @PrePersist
     public void prePersist() {

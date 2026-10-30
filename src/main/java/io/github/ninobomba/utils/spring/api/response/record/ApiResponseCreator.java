@@ -82,6 +82,14 @@ public interface ApiResponseCreator {
 
     static ResponseEntity<ApiRecordResponse> toApiResponse(
             String requestId,
+            Object payload,
+            HttpStatus status
+    ) {
+            return createSuccessResponse(requestId, payload, status);
+    }
+
+    static ResponseEntity<ApiRecordResponse> toApiResponse(
+            String requestId,
             Boolean response,
             BizProcessResponse.Status status,
             Object payload

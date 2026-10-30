@@ -49,7 +49,11 @@ public interface HttpResponseDataUtils {
 	}
 
 	static void addElapseTimeToResponseHeader(ServletResponse servletResponse, LocalDateTime startTime) {
-		long elapsedMillis = Duration.between(startTime, LocalDateTime.now()).toMillis();
+		var endTime = LocalDateTime.now();
+		long elapsedMillis = Duration.between(startTime, endTime ).toMillis();
+
+		addResponseHeader(servletResponse, "RequestStartTime", startTime.format(DateTimeFormatter.RFC_1123_DATE_TIME));
+		addResponseHeader(servletResponse, "RequestEndTime", endTime.format(DateTimeFormatter.RFC_1123_DATE_TIME));
 		addResponseHeader(servletResponse, "ResponseElapseTime", elapsedMillis + " ms");
 	}
 
